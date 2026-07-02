@@ -30,7 +30,7 @@ export default function NewsDetailPage({ params }: { params: { slug: string } })
   ]);
 
   return (
-    <div className="container-page py-8">
+    <div className="container-wide py-14 md:py-20">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }}
@@ -41,16 +41,12 @@ export default function NewsDetailPage({ params }: { params: { slug: string } })
           { name: "Tin tức", href: "/tin-tuc" },
           { name: article.title },
         ]}
-        className="mb-4"
+        className="mb-10"
       />
       <article className="mx-auto max-w-3xl">
-        <span className="inline-block rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
-          {article.category}
-        </span>
-        <h1 className="mt-3 text-3xl font-bold leading-tight tracking-tight">
-          {article.title}
-        </h1>
-        <div className="mt-4 flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
+        <span className="eyebrow">{article.category}</span>
+        <h1 className="heading-section mt-5">{article.title}</h1>
+        <div className="mt-6 flex flex-wrap items-center gap-5 text-sm text-muted-foreground">
           <span className="flex items-center gap-1.5">
             <User className="h-4 w-4" /> {article.author}
           </span>
@@ -62,7 +58,7 @@ export default function NewsDetailPage({ params }: { params: { slug: string } })
             <Clock className="h-4 w-4" /> {article.readTime} phút đọc
           </span>
         </div>
-        <div className="relative mt-6 aspect-video overflow-hidden rounded-xl border border-border bg-secondary">
+        <div className="relative mt-10 aspect-video overflow-hidden rounded-xl bg-secondary">
           <Image
             src={article.image}
             alt={article.title}
@@ -72,12 +68,12 @@ export default function NewsDetailPage({ params }: { params: { slug: string } })
             priority
           />
         </div>
-        <div className="prose prose-lg mt-6 max-w-none leading-relaxed text-foreground/90">
-          <p className="text-lg text-muted-foreground">{article.excerpt}</p>
-          <p className="mt-4 whitespace-pre-line">{article.content}</p>
+        <div className="mt-10 leading-relaxed text-foreground/90">
+          <p className="text-xl text-muted-foreground">{article.excerpt}</p>
+          <p className="mt-6 whitespace-pre-line text-lg">{article.content}</p>
         </div>
-        <div className="mt-8 border-t border-border pt-6">
-          <Button asChild variant="outline">
+        <div className="mt-12 border-t border-border/40 pt-8">
+          <Button asChild variant="ghost" className="rounded-xl">
             <Link href="/tin-tuc">
               <ArrowLeft className="mr-2 h-4 w-4" /> Về trang tin tức
             </Link>

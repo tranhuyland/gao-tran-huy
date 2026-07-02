@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { Star, MapPin, Check, Minus, Plus, ShoppingCart, MessageCircle, Truck, ShieldCheck } from "lucide-react";
+import { Star, Check, MessageCircle, Truck, ShieldCheck } from "lucide-react";
 import { getProductBySlug, getRelatedProducts, getCategoryBySlug } from "@/lib/products";
 import { Breadcrumb } from "@/components/Breadcrumb";
 import { RelatedProducts } from "@/components/RelatedProducts";
@@ -38,7 +38,7 @@ export default function ProductDetailPage({ params }: { params: { slug: string }
   ]);
 
   return (
-    <div className="container-page py-8">
+    <div className="container-wide py-14 md:py-20">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -57,11 +57,11 @@ export default function ProductDetailPage({ params }: { params: { slug: string }
             : []),
           { name: product.name },
         ]}
-        className="mb-5"
+        className="mb-10"
       />
 
-      <div className="grid gap-8 lg:grid-cols-2">
-        <div className="relative aspect-square overflow-hidden rounded-2xl border border-border bg-secondary">
+      <div className="grid gap-12 lg:grid-cols-2">
+        <div className="relative aspect-square overflow-hidden rounded-xl bg-secondary">
           <Image
             src={product.image}
             alt={product.name}
@@ -71,7 +71,7 @@ export default function ProductDetailPage({ params }: { params: { slug: string }
             priority
           />
           {discount > 0 && (
-            <span className="absolute left-4 top-4 rounded-full bg-destructive px-3 py-1 text-sm font-bold text-destructive-foreground">
+            <span className="absolute left-5 top-5 rounded-full bg-primary px-3.5 py-1.5 text-sm font-bold text-primary-foreground">
               -{discount}%
             </span>
           )}
@@ -81,80 +81,80 @@ export default function ProductDetailPage({ params }: { params: { slug: string }
           {category && (
             <Link
               href={`/danh-muc/${category.slug}`}
-              className="text-sm font-medium text-primary hover:underline"
+              className="eyebrow hover:underline"
             >
               {category.name}
             </Link>
           )}
-          <h1 className="mt-2 text-2xl font-bold leading-tight tracking-tight sm:text-3xl">
-            {product.name}
-          </h1>
+          <h1 className="heading-section mt-4">{product.name}</h1>
 
-          <div className="mt-3 flex flex-wrap items-center gap-4 text-sm">
-            <span className="flex items-center gap-1">
-              <Star className="h-4 w-4 fill-accent text-accent" />
-              <span className="font-semibold">{product.rating}</span>
+          <div className="mt-6 flex flex-wrap items-center gap-5 text-sm">
+            <span className="flex items-center gap-1.5">
+              <Star className="h-4 w-4 fill-primary text-primary" />
+              <span className="font-bold">{product.rating}</span>
             </span>
             <span className="text-muted-foreground">Đã bán {product.sold}</span>
-            <span className="flex items-center gap-1 text-muted-foreground">
-              <MapPin className="h-4 w-4" /> {product.origin}
-            </span>
+            <span className="text-muted-foreground">· {product.origin}</span>
             {product.inStock ? (
-              <span className="flex items-center gap-1 font-medium text-green-600">
+              <span className="flex items-center gap-1.5 font-bold text-primary">
                 <Check className="h-4 w-4" /> Còn hàng
               </span>
             ) : (
-              <span className="font-medium text-destructive">Hết hàng</span>
+              <span className="font-bold text-destructive">Hết hàng</span>
             )}
           </div>
 
-          <div className="mt-5 flex items-baseline gap-3">
-            <span className="text-3xl font-bold text-primary">
+          <div className="mt-8 flex items-baseline gap-3">
+            <span className="text-4xl font-black text-primary">
               {new Intl.NumberFormat("vi-VN").format(product.price)}₫
             </span>
-            <span className="text-sm text-muted-foreground">/{product.unit}</span>
+            <span className="text-base text-muted-foreground">/{product.unit}</span>
             {product.oldPrice && (
-              <span className="text-lg text-muted-foreground line-through">
+              <span className="text-xl text-muted-foreground line-through">
                 {new Intl.NumberFormat("vi-VN").format(product.oldPrice)}₫
               </span>
             )}
           </div>
 
-          <p className="mt-5 text-muted-foreground">{product.shortDescription}</p>
+          <p className="mt-6 text-lg leading-relaxed text-muted-foreground">
+            {product.shortDescription}
+          </p>
 
           <ProductDetailActions product={product} />
 
-          <div className="mt-6 grid grid-cols-2 gap-3 text-sm">
-            <div className="flex items-center gap-2 rounded-lg border border-border bg-card p-3">
+          <div className="mt-8 grid grid-cols-2 gap-3 text-sm">
+            <div className="flex items-center gap-2.5 rounded-xl bg-secondary/40 p-4">
               <Truck className="h-5 w-5 text-primary" />
-              <span>Giao hàng tận nơi</span>
+              <span className="font-bold">Giao hàng tận nơi</span>
             </div>
-            <div className="flex items-center gap-2 rounded-lg border border-border bg-card p-3">
+            <div className="flex items-center gap-2.5 rounded-xl bg-secondary/40 p-4">
               <ShieldCheck className="h-5 w-5 text-primary" />
-              <span>Chất lượng đảm bảo</span>
+              <span className="font-bold">Chất lượng đảm bảo</span>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="mt-10 grid gap-8 lg:grid-cols-3">
+      <div className="mt-20 grid gap-12 lg:grid-cols-3">
         <div className="lg:col-span-2">
-          <h2 className="text-xl font-bold">Mô tả sản phẩm</h2>
-          <p className="mt-3 leading-relaxed text-muted-foreground">
+          <h2 className="heading-sub">Mô tả sản phẩm</h2>
+          <p className="mt-5 text-lg leading-relaxed text-muted-foreground">
             {product.description}
           </p>
 
           {product.nutrition && product.nutrition.length > 0 && (
-            <div className="mt-6">
-              <h3 className="mb-3 text-lg font-semibold">Thông tin dinh dưỡng</h3>
-              <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+            <div className="mt-10">
+              <h3 className="text-xl font-bold">Thông tin dinh dưỡng</h3>
+              <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-4">
                 {product.nutrition.map((n) => (
                   <div
                     key={n.label}
-                    className="rounded-lg border border-border bg-card p-3 text-center"
+                    className="rounded-xl bg-secondary/40 p-5 text-center"
                   >
-                    <p className="text-xs text-muted-foreground">{n.label}</p>
-                    <p className="mt-1 font-semibold">{n.value}</p>
+                    <p className="text-xs font-bold uppercase tracking-wide text-muted-foreground">
+                      {n.label}
+                    </p>
+                    <p className="mt-2 text-lg font-black text-primary">{n.value}</p>
                   </div>
                 ))}
               </div>
@@ -162,11 +162,11 @@ export default function ProductDetailPage({ params }: { params: { slug: string }
           )}
 
           {product.tags.length > 0 && (
-            <div className="mt-6 flex flex-wrap gap-2">
+            <div className="mt-8 flex flex-wrap gap-2">
               {product.tags.map((t) => (
                 <span
                   key={t}
-                  className="rounded-full bg-secondary px-3 py-1 text-xs text-secondary-foreground"
+                  className="rounded-full bg-secondary px-3.5 py-1.5 text-sm font-semibold text-secondary-foreground"
                 >
                   #{t}
                 </span>
@@ -175,22 +175,22 @@ export default function ProductDetailPage({ params }: { params: { slug: string }
           )}
         </div>
 
-        <aside className="rounded-xl border border-border bg-secondary/40 p-5">
-          <h3 className="font-semibold">Đặt hàng nhanh</h3>
-          <p className="mt-2 text-sm text-muted-foreground">
+        <aside className="h-fit rounded-xl bg-secondary/40 p-7">
+          <h3 className="text-lg font-bold">Đặt hàng nhanh</h3>
+          <p className="mt-3 text-sm text-muted-foreground">
             Gọi hoặc nhắn Zalo để được tư vấn và giao hàng tận nơi.
           </p>
           <a
             href={SITE.zaloLink}
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-4 flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90"
+            className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-4 py-3.5 text-sm font-bold text-primary-foreground transition-opacity hover:opacity-90"
           >
             <MessageCircle className="h-4 w-4" /> Đặt qua Zalo
           </a>
           <a
             href={`tel:${SITE.phone.replace(/\s/g, "")}`}
-            className="mt-2 flex w-full items-center justify-center gap-2 rounded-lg border border-border bg-background px-4 py-2.5 text-sm font-semibold transition-colors hover:bg-secondary"
+            className="mt-2 flex w-full items-center justify-center gap-2 rounded-xl bg-background px-4 py-3.5 text-sm font-bold transition-colors hover:bg-secondary"
           >
             Gọi {SITE.phone}
           </a>

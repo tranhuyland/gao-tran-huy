@@ -12,68 +12,69 @@ export const metadata = buildMetadata({
 
 export default function ContactPage() {
   return (
-    <div className="container-page py-8">
+    <div className="container-wide py-14 md:py-20">
       <Breadcrumb
         items={[{ name: "Trang chủ", href: "/" }, { name: "Liên hệ" }]}
-        className="mb-4"
+        className="mb-8"
       />
-      <h1 className="text-3xl font-bold tracking-tight">Liên hệ</h1>
-      <p className="mt-2 max-w-2xl text-muted-foreground">
+      <p className="eyebrow">Liên hệ</p>
+      <h1 className="heading-section mt-4">Liên hệ với chúng tôi</h1>
+      <p className="mt-5 max-w-2xl text-lg text-muted-foreground">
         Liên hệ với Gạo Trần Huy để được tư vấn gạo và đặt hàng nhanh chóng.
       </p>
 
-      <div className="mt-8 grid gap-8 lg:grid-cols-2">
-        <div className="space-y-4">
-          <div className="rounded-xl border border-border bg-card p-5">
-            <h2 className="mb-4 text-lg font-semibold">Thông tin liên hệ</h2>
-            <ul className="space-y-4">
-              <li className="flex gap-3">
+      <div className="mt-14 grid gap-10 lg:grid-cols-2">
+        <div className="space-y-6">
+          <div className="rounded-xl bg-secondary/40 p-7">
+            <h2 className="text-lg font-bold">Thông tin liên hệ</h2>
+            <ul className="mt-7 space-y-6">
+              <li className="flex gap-4">
                 <MapPin className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
                 <div>
-                  <p className="font-medium">Địa chỉ</p>
-                  <p className="text-sm text-muted-foreground">{SITE.address}</p>
+                  <p className="font-bold">Địa chỉ</p>
+                  <p className="mt-1 text-sm text-muted-foreground">{SITE.address}</p>
                 </div>
               </li>
-              <li className="flex gap-3">
+              <li className="flex gap-4">
                 <Phone className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
                 <div>
-                  <p className="font-medium">Điện thoại</p>
+                  <p className="font-bold">Điện thoại</p>
                   <a
                     href={`tel:${SITE.phone.replace(/\s/g, "")}`}
-                    className="text-sm text-muted-foreground hover:text-primary"
+                    className="mt-1 block text-sm text-muted-foreground hover:text-primary"
                   >
                     {SITE.phone}
                   </a>
                 </div>
               </li>
-              <li className="flex gap-3">
+              <li className="flex gap-4">
                 <Mail className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
                 <div>
-                  <p className="font-medium">Email</p>
+                  <p className="font-bold">Email</p>
                   <a
                     href={`mailto:${SITE.email}`}
-                    className="text-sm text-muted-foreground hover:text-primary"
+                    className="mt-1 block text-sm text-muted-foreground hover:text-primary"
                   >
                     {SITE.email}
                   </a>
                 </div>
               </li>
-              <li className="flex gap-3">
+              <li className="flex gap-4">
                 <Clock className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
                 <div>
-                  <p className="font-medium">Giờ làm việc</p>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="font-bold">Giờ làm việc</p>
+                  <p className="mt-1 text-sm text-muted-foreground">
                     {SITE.workingHours}
                   </p>
                 </div>
               </li>
             </ul>
-            <div className="mt-5 flex gap-2">
+            <div className="mt-7 flex gap-3">
               <a
                 href={SITE.zaloLink}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground"
+                className="inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-3 text-sm font-bold text-primary-foreground"
               >
                 <MessageCircle className="h-4 w-4" /> Zalo
               </a>
@@ -81,7 +82,7 @@ export default function ContactPage() {
                 href={SITE.facebook}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-lg border border-border bg-background px-4 py-2 text-sm font-semibold hover:bg-secondary"
+                className="inline-flex items-center gap-2 rounded-xl bg-background px-5 py-3 text-sm font-bold transition-colors hover:bg-secondary"
               >
                 <Facebook className="h-4 w-4" /> Facebook
               </a>
@@ -89,13 +90,13 @@ export default function ContactPage() {
           </div>
         </div>
 
-        <div className="overflow-hidden rounded-xl border border-border">
+        <div className="overflow-hidden rounded-xl bg-secondary/40">
           <iframe
             title="Bản đồ Gạo Trần Huy"
             src={SITE.mapEmbed}
             width="100%"
             height="100%"
-            style={{ minHeight: 360, border: 0 }}
+            style={{ minHeight: 420, border: 0 }}
             loading="lazy"
             referrerPolicy="no-referrer-when-downgrade"
           />
