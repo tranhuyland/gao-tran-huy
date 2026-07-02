@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
-import { Menu, ShoppingBag, X, Wheat, Phone } from "lucide-react";
+import { Menu, ShoppingBag, X, Phone, Wheat } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/hooks/use-cart";
 import { SITE } from "@/lib/site";
@@ -23,66 +23,70 @@ export function Header() {
   const { totalItems, open: openCart } = useCart();
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border/60 bg-background/85 backdrop-blur supports-[backdrop-filter]:bg-background/70">
-      <div className="bg-primary text-primary-foreground text-xs">
-        <div className="container-page flex h-8 items-center justify-between">
+    <header className="sticky top-0 z-50 w-full bg-background/75 backdrop-blur-xl">
+      <div className="border-b border-border/30">
+        <div className="container-wide flex h-9 items-center justify-between text-xs text-muted-foreground">
           <p className="hidden sm:block">
-            Gạo Trần Huy – Gạo sạch, nước mắm NAM Ô, dầu lạc nguyên chất
+            Gạo sạch · Nước mắm NAM Ô · Dầu lạc nguyên chất
           </p>
           <a
             href={`tel:${SITE.phone.replace(/\s/g, "")}`}
-            className="flex items-center gap-1.5 font-medium hover:opacity-90"
+            className="flex items-center gap-1.5 font-semibold transition-colors hover:text-primary"
           >
-            <Phone className="h-3.5 w-3.5" />
+            <Phone className="h-3 w-3" />
             {SITE.phone}
           </a>
         </div>
       </div>
 
-      <div className="container-page flex h-16 items-center justify-between gap-4">
-        <Link href="/" className="flex items-center gap-2.5">
-          <span className="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-sm">
+      <div className="container-wide flex h-20 items-center justify-between gap-4">
+        <Link href="/" className="flex items-center gap-3">
+          <span className="flex h-11 w-11 items-center justify-center rounded-full bg-primary text-primary-foreground">
             <Wheat className="h-5 w-5" />
           </span>
-          <span className="flex flex-col leading-tight">
-            <span className="text-lg font-bold tracking-tight">
+          <span className="flex flex-col leading-none">
+            <span className="text-xl font-black tracking-tight text-primary">
               Gạo Trần Huy
             </span>
-            <span className="text-[11px] text-muted-foreground">
-              Gạo sạch – Đậm vị quê
+            <span className="mt-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-muted-foreground">
+              Gạo sạch · Đậm vị quê
             </span>
           </span>
         </Link>
 
         <nav className="hidden items-center gap-1 md:flex">
-          {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className={cn(
-                "rounded-md px-3.5 py-2 text-sm font-medium transition-colors hover:bg-secondary hover:text-secondary-foreground",
-                pathname === link.href ||
-                  (link.href !== "/" && pathname.startsWith(link.href))
-                  ? "text-primary"
-                  : "text-foreground/80"
-              )}
-            >
-              {link.label}
-            </Link>
-          ))}
+          {navLinks.map((link) => {
+            const active =
+              pathname === link.href ||
+              (link.href !== "/" && pathname.startsWith(link.href));
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={cn(
+                  "rounded-xl px-4 py-2.5 text-sm font-bold transition-colors",
+                  active
+                    ? "text-primary"
+                    : "text-foreground/60 hover:text-primary"
+                )}
+              >
+                {link.label}
+              </Link>
+            );
+          })}
         </nav>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1">
           <Button
             variant="ghost"
             size="icon"
             onClick={openCart}
-            className="relative"
+            className="relative h-11 w-11 rounded-full"
             aria-label="Giỏ hàng"
           >
             <ShoppingBag className="h-5 w-5" />
             {totalItems > 0 && (
-              <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-primary px-1 text-[11px] font-bold text-primary-foreground">
+              <span className="absolute -right-0.5 -top-0.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-primary px-1 text-[11px] font-bold text-primary-foreground">
                 {totalItems}
               </span>
             )}
@@ -90,7 +94,7 @@ export function Header() {
           <Button
             variant="ghost"
             size="icon"
-            className="md:hidden"
+            className="h-11 w-11 rounded-full md:hidden"
             onClick={() => setOpen(true)}
             aria-label="Mở menu"
           >
@@ -102,15 +106,21 @@ export function Header() {
       {open && (
         <div className="fixed inset-0 z-50 md:hidden">
           <div
-            className="absolute inset-0 bg-black/40"
+            className="absolute inset-0 bg-primary/20 backdrop-blur-sm"
             onClick={() => setOpen(false)}
           />
-          <div className="absolute right-0 top-0 h-full w-72 max-w-[85%] bg-background p-5 shadow-xl">
-            <div className="mb-4 flex items-center justify-between">
-              <span className="text-lg font-bold">Menu</span>
+          <div className="absolute right-0 top-0 h-full w-80 max-w-[85%] bg-background p-6">
+            <div className="mb-8 flex items-center justify-between">
+              <span className="flex items-center gap-2.5">
+                <span className="flex h-9 w-9 items-center justify-center rounded-full bg-primary text-primary-foreground">
+                  <Wheat className="h-4 w-4" />
+                </span>
+                <span className="text-lg font-black text-primary">Menu</span>
+              </span>
               <Button
                 variant="ghost"
                 size="icon"
+                className="rounded-full"
                 onClick={() => setOpen(false)}
               >
                 <X className="h-5 w-5" />
@@ -122,7 +132,7 @@ export function Header() {
                   key={link.href}
                   href={link.href}
                   onClick={() => setOpen(false)}
-                  className="rounded-md px-3 py-2.5 text-base font-medium hover:bg-secondary"
+                  className="rounded-xl px-4 py-3.5 text-lg font-bold text-foreground/70 transition-colors hover:bg-secondary hover:text-primary"
                 >
                   {link.label}
                 </Link>
