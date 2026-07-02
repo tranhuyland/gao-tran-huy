@@ -5,14 +5,18 @@ import { ProductGrid } from "@/components/ProductGrid";
 import { ContactCTA } from "@/components/ContactCTA";
 import { NewsCard } from "@/components/NewsCard";
 import { Button } from "@/components/ui/button";
-import { getFeaturedProducts, getBestSellers } from "@/lib/products";
-import { newsArticles } from "@/data/products";
+import { fetchSheetProducts, fetchSheetNews } from "@/lib/sheet";
 import { ArrowRight, Truck, ShieldCheck, Leaf, Headphones } from "lucide-react";
 
-export default function HomePage() {
-  const featured = getFeaturedProducts().slice(0, 8);
-  const bestSellers = getBestSellers().slice(0, 4);
-  const news = newsArticles.slice(0, 3);
+export default async function HomePage() {
+  const [allProducts, allNews] = await Promise.all([
+    fetchSheetProducts(),
+    fetchSheetNews(),
+  ]);
+
+  const featured = allProducts.filter((p) => p.isFeatured).slice(0, 8);
+  const bestSellers = allProducts.filter((p) => p.isBestSeller).slice(0, 4);
+  const news = allNews.slice(0, 3);
 
   return (
     <>
@@ -66,44 +70,48 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="section-pad bg-secondary/30">
-        <div className="container-wide">
-          <p className="eyebrow">Bán chạy</p>
-          <h2 className="heading-section mt-4">Bán chạy nhất</h2>
-          <p className="mt-4 max-w-lg text-lg text-muted-foreground">
-            Những sản phẩm được khách hàng tin dùng.
-          </p>
-          <div className="mt-12">
-            <ProductGrid products={bestSellers} />
+      {bestSellers.length > 0 && (
+        <section className="section-pad bg-secondary/30">
+          <div className="container-wide">
+            <p className="eyebrow">Bán chạy</p>
+            <h2 className="heading-section mt-4">Bán chạy nhất</h2>
+            <p className="mt-4 max-w-lg text-lg text-muted-foreground">
+              Những sản phẩm được khách hàng tin dùng.
+            </p>
+            <div className="mt-12">
+              <ProductGrid products={bestSellers} />
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       <ContactCTA />
 
-      <section className="section-pad">
-        <div className="container-wide">
-          <div className="flex items-end justify-between">
-            <div>
-              <p className="eyebrow">Tin tức</p>
-              <h2 className="heading-section mt-4">Tin tức & mẹo vặt</h2>
-              <p className="mt-4 max-w-lg text-lg text-muted-foreground">
-                Cách chọn gạo, nấu cơm ngon và kiến thức ẩm thực.
-              </p>
+      {news.length > 0 && (
+        <section className="section-pad">
+          <div className="container-wide">
+            <div className="flex items-end justify-between">
+              <div>
+                <p className="eyebrow">Tin tức</p>
+                <h2 className="heading-section mt-4">Tin tức & mẹo vặt</h2>
+                <p className="mt-4 max-w-lg text-lg text-muted-foreground">
+                  Cách chọn gạo, nấu cơm ngon và kiến thức ẩm thực.
+                </p>
+              </div>
+              <Button asChild variant="ghost" className="hidden rounded-xl sm:inline-flex">
+                <Link href="/tin-tuc">
+                  Xem tất cả <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
+              </Button>
             </div>
-            <Button asChild variant="ghost" className="hidden rounded-xl sm:inline-flex">
-              <Link href="/tin-tuc">
-                Xem tất cả <ArrowRight className="ml-2 h-4 w-4" />
-              </Link>
-            </Button>
+            <div className="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+              {news.map((a) => (
+                <NewsCard key={a.id} article={a} />
+              ))}
+            </div>
           </div>
-          <div className="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-            {news.map((a) => (
-              <NewsCard key={a.id} article={a} />
-            ))}
-          </div>
-        </div>
-      </section>
+        </section>
+      )}
     </>
   );
 }

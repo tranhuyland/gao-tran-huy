@@ -4,12 +4,13 @@ import { CalendarDays, Clock, User, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Breadcrumb } from "@/components/Breadcrumb";
-import { newsArticles } from "@/data/products";
+import { fetchSheetNews } from "@/lib/sheet";
 import { buildMetadata, breadcrumbJsonLd } from "@/lib/seo";
 import { SITE } from "@/lib/site";
 
 export async function generateMetadata({ params }: { params: { slug: string } }) {
-  const article = newsArticles.find((a) => a.slug === params.slug);
+  const news = await fetchSheetNews();
+  const article = news.find((a) => a.slug === params.slug);
   if (!article) return buildMetadata({ title: "Không tìm thấy bài viết" });
   return buildMetadata({
     title: article.title,
@@ -19,8 +20,9 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   });
 }
 
-export default function NewsDetailPage({ params }: { params: { slug: string } }) {
-  const article = newsArticles.find((a) => a.slug === params.slug);
+export default async function NewsDetailPage({ params }: { params: { slug: string } }) {
+  const news = await fetchSheetNews();
+  const article = news.find((a) => a.slug === params.slug);
   if (!article) notFound();
 
   const breadcrumbLd = breadcrumbJsonLd([

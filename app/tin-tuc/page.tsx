@@ -1,6 +1,6 @@
 import { NewsCard } from "@/components/NewsCard";
 import { Breadcrumb } from "@/components/Breadcrumb";
-import { newsArticles } from "@/data/products";
+import { fetchSheetNews } from "@/lib/sheet";
 import { buildMetadata } from "@/lib/seo";
 
 export const metadata = buildMetadata({
@@ -10,7 +10,9 @@ export const metadata = buildMetadata({
   path: "/tin-tuc",
 });
 
-export default function NewsPage() {
+export default async function NewsPage() {
+  const news = await fetchSheetNews();
+
   return (
     <div className="container-wide py-14 md:py-20">
       <Breadcrumb
@@ -23,7 +25,7 @@ export default function NewsPage() {
         Cách chọn gạo ngon, nấu cơm dẻo thơm và kiến thức ẩm thực Việt.
       </p>
       <div className="mt-14 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-        {newsArticles.map((a) => (
+        {news.map((a) => (
           <NewsCard key={a.id} article={a} />
         ))}
       </div>

@@ -1,6 +1,7 @@
 import { ProductGrid } from "@/components/ProductGrid";
 import { Breadcrumb } from "@/components/Breadcrumb";
-import { getAllProducts, getAllCategories } from "@/lib/products";
+import { getAllCategories } from "@/lib/products";
+import { fetchSheetProducts } from "@/lib/sheet";
 import { buildMetadata } from "@/lib/seo";
 
 export const metadata = buildMetadata({
@@ -10,9 +11,11 @@ export const metadata = buildMetadata({
   path: "/san-pham",
 });
 
-export default function ProductsPage() {
-  const products = getAllProducts();
-  const categories = getAllCategories();
+export default async function ProductsPage() {
+  const [products, categories] = await Promise.all([
+    fetchSheetProducts(),
+    Promise.resolve(getAllCategories()),
+  ]);
 
   return (
     <div className="container-wide py-14 md:py-20">

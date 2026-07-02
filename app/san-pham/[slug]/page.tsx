@@ -2,7 +2,8 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { Star, Check, MessageCircle, Truck, ShieldCheck } from "lucide-react";
-import { getProductBySlug, getRelatedProducts, getCategoryBySlug } from "@/lib/products";
+import { getCategoryBySlug } from "@/lib/products";
+import { fetchSheetProducts } from "@/lib/sheet";
 import { Breadcrumb } from "@/components/Breadcrumb";
 import { RelatedProducts } from "@/components/RelatedProducts";
 import { ProductDetailActions } from "@/components/ProductDetailActions";
@@ -10,7 +11,8 @@ import { buildMetadata, productJsonLd, breadcrumbJsonLd } from "@/lib/seo";
 import { SITE } from "@/lib/site";
 
 export async function generateMetadata({ params }: { params: { slug: string } }) {
-  const product = getProductBySlug(params.slug);
+  const products = await fetchSheetProducts();
+  const product = products.find((p) => p.slug === params.slug);
   if (!product) return buildMetadata({ title: "Không tìm thấy sản phẩm" });
   return buildMetadata({
     title: product.name,
@@ -20,12 +22,15 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   });
 }
 
-export default function ProductDetailPage({ params }: { params: { slug: string } }) {
-  const product = getProductBySlug(params.slug);
+export default async function ProductDetailPage({ params }: { params: { slug: string } }) {
+  const products = await fetchSheetProducts();
+  const product = products.find((p) => p.slug === params.slug);
   if (!product) notFound();
 
   const category = getCategoryBySlug(product.categorySlug);
-  const related = getRelatedProducts(product, 4);
+  const related = products
+    .filter((p) => p.categorySlug === product.categorySlug && p.id !== product.id)
+    .slice(0, 4);
   const discount = product.oldPrice
     ? Math.round((1 - product.price / product.oldPrice) * 100)
     : 0;

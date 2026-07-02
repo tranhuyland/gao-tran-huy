@@ -1,7 +1,8 @@
 import { notFound } from "next/navigation";
 import { ProductGrid } from "@/components/ProductGrid";
 import { Breadcrumb } from "@/components/Breadcrumb";
-import { getCategoryBySlug, getProductsByCategory } from "@/lib/products";
+import { getCategoryBySlug } from "@/lib/products";
+import { fetchSheetProducts } from "@/lib/sheet";
 import { buildMetadata } from "@/lib/seo";
 
 export async function generateMetadata({ params }: { params: { slug: string } }) {
@@ -15,10 +16,12 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   });
 }
 
-export default function CategoryPage({ params }: { params: { slug: string } }) {
+export default async function CategoryPage({ params }: { params: { slug: string } }) {
   const category = getCategoryBySlug(params.slug);
   if (!category) notFound();
-  const products = getProductsByCategory(params.slug);
+
+  const products = await fetchSheetProducts();
+  const categoryProducts = products.filter((p) => p.categorySlug === params.slug);
 
   return (
     <div className="container-wide py-14 md:py-20">
@@ -36,7 +39,7 @@ export default function CategoryPage({ params }: { params: { slug: string } }) {
         {category.description}
       </p>
       <div className="mt-14">
-        <ProductGrid products={products} />
+        <ProductGrid products={categoryProducts} />
       </div>
     </div>
   );
