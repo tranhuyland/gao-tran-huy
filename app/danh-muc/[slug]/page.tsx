@@ -1,7 +1,8 @@
 import { notFound } from "next/navigation";
 import { ProductGrid } from "@/components/ProductGrid";
 import { Breadcrumb } from "@/components/Breadcrumb";
-import { getCategoryBySlug, getProductsByCategory } from "@/lib/products";
+import { getCategoryBySlug } from "@/lib/products";
+import { fetchSheetProducts } from "@/lib/sheet";
 import { buildMetadata } from "@/lib/seo";
 
 export async function generateMetadata({ params }: { params: { slug: string } }) {
@@ -15,27 +16,30 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   });
 }
 
-export default function CategoryPage({ params }: { params: { slug: string } }) {
+export default async function CategoryPage({ params }: { params: { slug: string } }) {
   const category = getCategoryBySlug(params.slug);
   if (!category) notFound();
-  const products = getProductsByCategory(params.slug);
+
+  const products = await fetchSheetProducts();
+  const categoryProducts = products.filter((p) => p.categorySlug === params.slug);
 
   return (
-    <div className="container-page py-8">
+    <div className="container-wide py-14 md:py-20">
       <Breadcrumb
         items={[
           { name: "Trang chủ", href: "/" },
           { name: "Sản phẩm", href: "/san-pham" },
           { name: category.name },
         ]}
-        className="mb-4"
+        className="mb-8"
       />
-      <h1 className="text-3xl font-bold tracking-tight">{category.name}</h1>
-      <p className="mt-2 max-w-2xl text-muted-foreground">
+      <p className="eyebrow">Danh mục</p>
+      <h1 className="heading-section mt-4">{category.name}</h1>
+      <p className="mt-5 max-w-2xl text-lg text-muted-foreground">
         {category.description}
       </p>
-      <div className="mt-8">
-        <ProductGrid products={products} />
+      <div className="mt-14">
+        <ProductGrid products={categoryProducts} />
       </div>
     </div>
   );

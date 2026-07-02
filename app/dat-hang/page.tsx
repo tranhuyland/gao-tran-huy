@@ -44,24 +44,25 @@ export default function CheckoutPage() {
   };
 
   return (
-    <div className="container-page py-8">
+    <div className="container-wide py-14 md:py-20">
       <Breadcrumb
         items={[
           { name: "Trang chủ", href: "/" },
           { name: "Giỏ hàng", href: "/gio-hang" },
           { name: "Đặt hàng" },
         ]}
-        className="mb-4"
+        className="mb-8"
       />
-      <h1 className="text-3xl font-bold tracking-tight">Đặt hàng</h1>
+      <p className="eyebrow">Đặt hàng</p>
+      <h1 className="heading-section mt-4">Đặt hàng</h1>
 
       {submitted ? (
-        <div className="mt-8 max-w-xl rounded-xl border border-green-200 bg-green-50 p-8 text-center">
-          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-green-600 text-white">
-            <Check className="h-7 w-7" />
+        <div className="mt-12 max-w-xl rounded-xl bg-secondary/40 p-12 text-center">
+          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-primary text-primary-foreground">
+            <Check className="h-8 w-8" />
           </div>
-          <h2 className="mt-4 text-xl font-bold">Đơn hàng đã sẵn sàng!</h2>
-          <p className="mt-2 text-muted-foreground">
+          <h2 className="mt-6 text-2xl font-black">Đơn hàng đã sẵn sàng!</h2>
+          <p className="mt-3 text-muted-foreground">
             Vui lòng nhắn Zalo để xác nhận đơn. Chúng tôi sẽ liên hệ giao hàng
             trong thời gian sớm nhất.
           </p>
@@ -69,89 +70,94 @@ export default function CheckoutPage() {
             href={buildZaloMessage()}
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-5 inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-2.5 font-semibold text-primary-foreground"
+            className="mt-7 inline-flex items-center gap-2 rounded-xl bg-primary px-6 py-3.5 font-bold text-primary-foreground"
           >
             <MessageCircle className="h-5 w-5" /> Gửi đơn qua Zalo
           </a>
-          <div className="mt-4">
+          <div className="mt-5">
             <Button
               variant="ghost"
               onClick={() => {
                 clear();
                 setSubmitted(false);
               }}
+              className="rounded-xl"
             >
               Đặt đơn mới
             </Button>
           </div>
         </div>
       ) : items.length === 0 ? (
-        <div className="mt-8 flex flex-col items-center gap-4 rounded-xl border border-dashed border-border py-20 text-center">
-          <ShoppingBag className="h-14 w-14 text-muted-foreground/40" />
-          <p className="text-lg font-medium">Giỏ hàng trống</p>
-          <Button asChild>
+        <div className="mt-12 flex flex-col items-center gap-6 rounded-xl bg-secondary/40 py-28 text-center">
+          <ShoppingBag className="h-16 w-16 text-muted-foreground/25" />
+          <p className="text-xl font-bold">Giỏ hàng trống</p>
+          <Button asChild className="rounded-xl">
             <Link href="/san-pham">Mua sắm ngay</Link>
           </Button>
         </div>
       ) : (
-        <div className="mt-8 grid gap-8 lg:grid-cols-3">
-          <form onSubmit={handleSubmit} className="lg:col-span-2 space-y-4">
-            <div className="rounded-xl border border-border bg-card p-5">
-              <h2 className="mb-4 text-lg font-semibold">Thông tin giao hàng</h2>
-              <div className="grid gap-4 sm:grid-cols-2">
-                <div className="space-y-1.5">
-                  <Label htmlFor="name">Họ và tên *</Label>
+        <div className="mt-12 grid gap-10 lg:grid-cols-3">
+          <form onSubmit={handleSubmit} className="lg:col-span-2 space-y-6">
+            <div className="rounded-xl bg-secondary/40 p-7">
+              <h2 className="text-lg font-bold">Thông tin giao hàng</h2>
+              <div className="mt-6 grid gap-5 sm:grid-cols-2">
+                <div className="space-y-2">
+                  <Label htmlFor="name" className="font-bold">Họ và tên *</Label>
                   <Input
                     id="name"
                     required
                     value={form.name}
                     onChange={(e) => setForm({ ...form, name: e.target.value })}
                     placeholder="Nguyễn Văn A"
+                    className="rounded-xl bg-background"
                   />
                 </div>
-                <div className="space-y-1.5">
-                  <Label htmlFor="phone">Số điện thoại *</Label>
+                <div className="space-y-2">
+                  <Label htmlFor="phone" className="font-bold">Số điện thoại *</Label>
                   <Input
                     id="phone"
                     required
                     value={form.phone}
                     onChange={(e) => setForm({ ...form, phone: e.target.value })}
                     placeholder="0901 234 567"
+                    className="rounded-xl bg-background"
                   />
                 </div>
               </div>
-              <div className="mt-4 space-y-1.5">
-                <Label htmlFor="address">Địa chỉ giao hàng *</Label>
+              <div className="mt-5 space-y-2">
+                <Label htmlFor="address" className="font-bold">Địa chỉ giao hàng *</Label>
                 <Input
                   id="address"
                   required
                   value={form.address}
                   onChange={(e) => setForm({ ...form, address: e.target.value })}
                   placeholder="Số nhà, đường, phường, quận, TP"
+                  className="rounded-xl bg-background"
                 />
               </div>
-              <div className="mt-4 space-y-1.5">
-                <Label htmlFor="note">Ghi chú</Label>
+              <div className="mt-5 space-y-2">
+                <Label htmlFor="note" className="font-bold">Ghi chú</Label>
                 <Textarea
                   id="note"
                   value={form.note}
                   onChange={(e) => setForm({ ...form, note: e.target.value })}
                   placeholder="Thời gian giao, ghi chú thêm..."
                   rows={3}
+                  className="rounded-xl bg-background"
                 />
               </div>
             </div>
-            <Button type="submit" size="lg" className="w-full sm:w-auto">
+            <Button type="submit" size="lg" className="rounded-xl px-8">
               Xác nhận đặt hàng
             </Button>
           </form>
 
-          <aside className="h-fit rounded-xl border border-border bg-card p-5">
-            <h2 className="text-lg font-semibold">Đơn hàng của bạn</h2>
-            <ul className="mt-4 space-y-3">
+          <aside className="h-fit rounded-xl bg-secondary/40 p-7">
+            <h2 className="text-lg font-bold">Đơn hàng của bạn</h2>
+            <ul className="mt-6 space-y-5">
               {items.map((item) => (
                 <li key={item.product.id} className="flex gap-3">
-                  <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-md border border-border bg-secondary">
+                  <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-lg bg-secondary">
                     <Image
                       src={item.product.image}
                       alt={item.product.name}
@@ -161,18 +167,18 @@ export default function CheckoutPage() {
                     />
                   </div>
                   <div className="flex-1 text-sm">
-                    <p className="line-clamp-1 font-medium">{item.product.name}</p>
+                    <p className="line-clamp-1 font-bold">{item.product.name}</p>
                     <p className="text-muted-foreground">
                       {item.quantity} x {formatPrice(item.product.price)}
                     </p>
                   </div>
-                  <span className="text-sm font-semibold">
+                  <span className="text-sm font-bold">
                     {formatPrice(item.product.price * item.quantity)}
                   </span>
                 </li>
               ))}
             </ul>
-            <div className="mt-4 flex justify-between border-t border-border pt-3 text-base font-semibold">
+            <div className="mt-6 flex justify-between border-t border-border/40 pt-5 text-lg font-black">
               <span>Tổng cộng</span>
               <span className="text-primary">{formatPrice(totalPrice)}</span>
             </div>

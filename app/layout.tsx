@@ -9,7 +9,7 @@ import { SITE } from "@/lib/site";
 
 const font = Be_Vietnam_Pro({
   subsets: ["latin", "vietnamese"],
-  weight: ["400", "500", "600", "700"],
+  weight: ["400", "500", "600", "700", "800", "900"],
   variable: "--font-sans",
 });
 

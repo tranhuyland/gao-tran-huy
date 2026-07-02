@@ -4,27 +4,28 @@
 
 @layer base {
   :root {
-    --background: 40 30% 99%;
-    --foreground: 25 30% 12%;
+    /* Premium deep organic green brand palette */
+    --background: 60 20% 99%;
+    --foreground: 155 18% 10%;
     --card: 0 0% 100%;
-    --card-foreground: 25 30% 12%;
+    --card-foreground: 155 18% 10%;
     --popover: 0 0% 100%;
-    --popover-foreground: 25 30% 12%;
-    --primary: 28 80% 45%;
-    --primary-foreground: 40 40% 99%;
-    --secondary: 40 30% 94%;
-    --secondary-foreground: 25 30% 18%;
-    --muted: 40 20% 95%;
-    --muted-foreground: 25 10% 42%;
-    --accent: 45 70% 55%;
-    --accent-foreground: 25 30% 14%;
-    --destructive: 0 72% 50%;
-    --destructive-foreground: 40 40% 99%;
-    --border: 35 25% 88%;
-    --input: 35 25% 88%;
-    --ring: 28 80% 45%;
-    --radius: 0.6rem;
-    --chart-1: 28 80% 45%;
+    --popover-foreground: 155 18% 10%;
+    --primary: 155 45% 18%;
+    --primary-foreground: 60 20% 98%;
+    --secondary: 150 15% 96%;
+    --secondary-foreground: 155 20% 16%;
+    --muted: 150 12% 95%;
+    --muted-foreground: 155 10% 40%;
+    --accent: 150 25% 90%;
+    --accent-foreground: 155 45% 16%;
+    --destructive: 0 70% 48%;
+    --destructive-foreground: 60 20% 98%;
+    --border: 150 12% 91%;
+    --input: 150 12% 91%;
+    --ring: 155 45% 18%;
+    --radius: 0.75rem;
+    --chart-1: 155 45% 18%;
     --chart-2: 95 40% 45%;
     --chart-3: 45 70% 55%;
     --chart-4: 12 70% 50%;
@@ -39,6 +40,11 @@
   body {
     @apply bg-background text-foreground;
     font-feature-settings: "rlig" 1, "calt" 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    letter-spacing: -0.025em;
   }
 }
 
@@ -46,7 +52,31 @@
   .container-page {
     @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
   }
+  .container-wide {
+    @apply mx-auto w-full max-w-[1400px] px-5 sm:px-8 lg:px-12;
+  }
   .text-balance {
     text-wrap: balance;
+  }
+  .section-pad {
+    @apply py-16 md:py-24;
+  }
+  .heading-display {
+    @apply text-4xl font-black tracking-tight leading-[1.05] sm:text-5xl lg:text-6xl;
+    letter-spacing: -0.035em;
+  }
+  .heading-section {
+    @apply text-3xl font-extrabold tracking-tight leading-tight sm:text-4xl;
+    letter-spacing: -0.03em;
+  }
+  .heading-sub {
+    @apply text-xl font-bold tracking-tight sm:text-2xl;
+    letter-spacing: -0.02em;
+  }
+  .eyebrow {
+    @apply text-xs font-bold uppercase tracking-[0.18em] text-primary;
+  }
+  .eyebrow-muted {
+    @apply text-xs font-bold uppercase tracking-[0.18em] text-muted-foreground;
   }
 }

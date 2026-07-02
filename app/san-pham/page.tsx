@@ -1,6 +1,7 @@
 import { ProductGrid } from "@/components/ProductGrid";
 import { Breadcrumb } from "@/components/Breadcrumb";
-import { getAllProducts, getAllCategories } from "@/lib/products";
+import { getAllCategories } from "@/lib/products";
+import { fetchSheetProducts } from "@/lib/sheet";
 import { buildMetadata } from "@/lib/seo";
 
 export const metadata = buildMetadata({
@@ -10,35 +11,38 @@ export const metadata = buildMetadata({
   path: "/san-pham",
 });
 
-export default function ProductsPage() {
-  const products = getAllProducts();
-  const categories = getAllCategories();
+export default async function ProductsPage() {
+  const [products, categories] = await Promise.all([
+    fetchSheetProducts(),
+    Promise.resolve(getAllCategories()),
+  ]);
 
   return (
-    <div className="container-page py-8">
+    <div className="container-wide py-14 md:py-20">
       <Breadcrumb
         items={[{ name: "Trang chủ", href: "/" }, { name: "Sản phẩm" }]}
-        className="mb-4"
+        className="mb-8"
       />
-      <h1 className="text-3xl font-bold tracking-tight">Tất cả sản phẩm</h1>
-      <p className="mt-2 max-w-2xl text-muted-foreground">
+      <p className="eyebrow">Sản phẩm</p>
+      <h1 className="heading-section mt-4">Tất cả sản phẩm</h1>
+      <p className="mt-5 max-w-2xl text-lg text-muted-foreground">
         Khám phá đầy đủ các dòng sản phẩm của Gạo Trần Huy – gạo sạch, nước mắm
         nhĩ NAM Ô, dầu lạc nguyên chất và gia vị.
       </p>
 
-      <div className="mt-6 flex flex-wrap gap-2">
+      <div className="mt-10 flex flex-wrap gap-2">
         {categories.map((c) => (
           <a
             key={c.slug}
             href={`/danh-muc/${c.slug}`}
-            className="rounded-full border border-border bg-card px-3.5 py-1.5 text-sm font-medium transition-colors hover:border-primary hover:text-primary"
+            className="rounded-full bg-secondary px-4 py-2 text-sm font-bold text-foreground transition-colors hover:bg-primary hover:text-primary-foreground"
           >
             {c.name}
           </a>
         ))}
       </div>
 
-      <div className="mt-8">
+      <div className="mt-14">
         <ProductGrid products={products} />
       </div>
     </div>
