@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { usePathname } from "next/navigation";
 import { Menu, ShoppingBag, X, Phone, Wheat, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -21,8 +22,27 @@ const navLinks = [
 export function Header() {
   const [open, setOpen] = useState(false);
   const [submenuOpen, setSubmenuOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
   const { totalItems, open: openCart } = useCart();
+
+  useEffect(() => setMounted(true), []);
+
+  // Close menu on route change
+  useEffect(() => {
+    setOpen(false);
+    setSubmenuOpen(false);
+  }, [pathname]);
+
+  // Lock body scroll when drawer open
+  useEffect(() => {
+    if (open) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => { document.body.style.overflow = ""; };
+  }, [open]);
 
   const closeMenu = () => {
     setOpen(false);
@@ -30,6 +50,7 @@ export function Header() {
   };
 
   return (
+    <>
     <header className="sticky top-0 z-50 w-full bg-background/75 backdrop-blur-xl">
       <div className="border-b border-border/30">
         <div className="container-wide flex h-9 items-center justify-between text-xs text-muted-foreground">
@@ -109,10 +130,11 @@ export function Header() {
           </Button>
         </div>
       </div>
+    </header>
 
-      {/* Mobile navigation drawer */}
-      {open && (
-        <div className="fixed inset-0 z-[100] md:hidden">
+      {/* Mobile navigation drawer — rendered via portal to escape header's stacking context */}
+      {mounted && open && createPortal(
+        <div className="fixed inset-0 z-[200] md:hidden">
           {/* Dark tinted overlay with blur */}
           <div
             className="absolute inset-0 bg-primary/40 backdrop-blur-[4px]"
@@ -231,8 +253,9 @@ export function Header() {
               </a>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
-    </header>
+    </>
   );
 }
