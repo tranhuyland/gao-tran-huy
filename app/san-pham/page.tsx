@@ -1,49 +1,54 @@
-import { ProductGrid } from "@/components/ProductGrid";
+"use client";
+
+import { useState, useMemo } from "react";
+import { CategoryNavList } from "@/components/CategoryNavList";
+import { ShopeeProductGrid } from "@/components/ShopeeProductGrid";
 import { Breadcrumb } from "@/components/Breadcrumb";
-import { getAllCategories } from "@/lib/products";
-import { fetchSheetProducts } from "@/lib/sheet";
+import { products, categories } from "@/data/products";
 import { buildMetadata } from "@/lib/seo";
 
-export const metadata = buildMetadata({
-  title: "Tất cả sản phẩm",
-  description:
-    "Tất cả sản phẩm Gạo Trần Huy: gạo đặc sản, gạo bình dân, gạo lứt, nếp, nước mắm NAM Ô, dầu lạc nguyên chất.",
-  path: "/san-pham",
-});
+export default function ProductsPage() {
+  const [activeCategory, setActiveCategory] = useState<string>("all");
 
-export default async function ProductsPage() {
-  const [products, categories] = await Promise.all([
-    fetchSheetProducts(),
-    Promise.resolve(getAllCategories()),
-  ]);
+  const filtered = useMemo(() => {
+    if (activeCategory === "all") return products;
+    return products.filter((p) => p.categorySlug === activeCategory);
+  }, [activeCategory]);
+
+  const activeCat = categories.find((c) => c.slug === activeCategory);
 
   return (
-    <div className="container-wide py-14 md:py-20">
-      <Breadcrumb
-        items={[{ name: "Trang chủ", href: "/" }, { name: "Sản phẩm" }]}
-        className="mb-8"
-      />
-      <p className="eyebrow">Sản phẩm</p>
-      <h1 className="heading-section mt-4">Tất cả sản phẩm</h1>
-      <p className="mt-5 max-w-2xl text-lg text-muted-foreground">
-        Khám phá đầy đủ các dòng sản phẩm của Gạo Trần Huy – gạo sạch, nước mắm
-        nhĩ NAM Ô, dầu lạc nguyên chất và gia vị.
-      </p>
+    <div className="bg-[#f5f5f5] py-4 md:py-8">
+      <div className="container-wide">
+        <Breadcrumb
+          items={[{ name: "Trang chủ", href: "/" }, { name: "Sản phẩm" }]}
+          className="mb-4"
+        />
 
-      <div className="mt-10 flex flex-wrap gap-2">
-        {categories.map((c) => (
-          <a
-            key={c.slug}
-            href={`/danh-muc/${c.slug}`}
-            className="rounded-full bg-secondary px-4 py-2 text-sm font-bold text-foreground transition-colors hover:bg-primary hover:text-primary-foreground"
-          >
-            {c.name}
-          </a>
-        ))}
-      </div>
+        <h1 className="mb-1 font-serif text-2xl font-bold text-[#333333] sm:text-3xl">
+          {activeCat ? activeCat.name : "Tất cả sản phẩm"}
+        </h1>
+        <p className="mb-6 text-sm text-gray-500">
+          {filtered.length} sản phẩm · Gạo sạch, nước mắm NAM Ô, dầu lạc nguyên chất
+        </p>
 
-      <div className="mt-14">
-        <ProductGrid products={products} />
+        {/* Layout: sidebar + grid */}
+        <div className="flex flex-col gap-4 lg:flex-row lg:gap-6">
+          {/* Category sidebar — hidden on mobile, shown as drawer trigger */}
+          <aside className="lg:w-64 lg:shrink-0">
+            <div className="lg:sticky lg:top-24">
+              <CategoryNavList
+                activeSlug={activeCategory}
+                onSelect={setActiveCategory}
+              />
+            </div>
+          </aside>
+
+          {/* Product grid */}
+          <div className="flex-1">
+            <ShopeeProductGrid products={filtered} />
+          </div>
+        </div>
       </div>
     </div>
   );
